@@ -12,6 +12,7 @@
     let ncmb = new NCMB(appKey, clientKey);
     let UTdata = ncmb.DataStore("UpdateTest");
     let key = "score";
+    //データ追加処理
     function enterData() {
       let uTdata = new UTdata();
       let value = parseInt($("#data").val());
@@ -28,7 +29,7 @@
         $("#display").html("enter fail");
       })
     }
-
+    //データ一覧表示処理
     function fetchAll() {
       UTdata.fetchAll()
       .then(function(results){
@@ -47,25 +48,45 @@
         $("#display").html("delete fail:" + JSON.stringify(error));
       })
     }
-
+    //データ削除処理(先頭のみ)
     function deleteData() {
       UTdata.fetch()         //先頭データを取り出す
       .then(function(uTdata){
         return uTdata.delete();
       })
+      //成功時
       .then(function(results){
         $("#display").removeClass();
         $( "#display").addClass("bg-success");
         $("#display").html("delete success");
       })
+      //失敗時(エラー出力)
       .catch(function(error){
         $("#display").removeClass();
         $("#display").addClass("bg-warning");
         $("#display").html("delete fail:" + JSON.stringify(error));
       })
     }
+    //データ更新処理(先頭データを指定の数字に更新)
     function updateData() {
+      UTdata.fetch()
+      .then(function(uTdata){
+        let value = parseInt($("#update").val());
+        uTdata.set(key, value);
+        return uTdata.update();
+      })
+      .then(function(results){
+        $("#display").removeClass();
+        $("#display").addClass("bg-success");
+        $("#display").html("update success");
+      })
+      .catch(function(error){
+        $("#display").removeClass();
+        $("#display").addClass("bg-warning");
+        $("#display").html("update fail:" + JSON.stringify(error));
+      })
     }
+
     function countData() {
     }
     function sortData() {
@@ -86,7 +107,7 @@
   </div>
   <div>
     <input type="text" id="update" placeholder="更新">
-    <a onclick="updateData()" class="btn btn-outline-primary" role="button">Update</a>
+    <a onclick="updateData()" class="btn btn-outline-secondary" role="button">Update</a>
   </div>
   <div id="display" class="text-light bg-info">
     Results
