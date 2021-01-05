@@ -12,6 +12,7 @@
     let ncmb = new NCMB(appKey, clientKey);
     let UTdata = ncmb.DataStore("LastTest");
     let key = "score";
+    let cnt = 0;   //番号表示用
 
     function formReset(){  //スコア入力部分のみリセット
       document.content.reset();
@@ -57,7 +58,8 @@
       .then(function(results){
         let msg="";
         for(let i=0; i<results.length; i++){
-          msg += results[i].get(key) + "<br>";
+          cnt = i + 1;
+          msg += cnt + " " + results[i].get(key) + "<br>";
         }
         $("#display").removeClass();
         $("#display").addClass("text-light");
@@ -128,7 +130,8 @@
       .then(function(results){
         let msg="";
         for(let i=0; i<results.length; i++){
-          msg += results[i].get(key) + "<br>";
+          cnt = i + 1;
+          msg += cnt + " " + results[i].get(key) + "<br>";
         }
         $("#display").removeClass();
         $("#display").addClass("text-light");
