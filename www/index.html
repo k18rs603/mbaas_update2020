@@ -13,28 +13,43 @@
     let UTdata = ncmb.DataStore("LastTest");
     let key = "score";
 
+    function formReset(){  //スコア入力部分のみリセット
+      document.content.reset();
+    }
+
     //データ追加処理
     function enterData() {
       let uTdata = new UTdata();
-      let value = parseInt($("#data").val());
-      if(value == null){  //文字列の場合
-        let value = $("#data").val();  //文字列として再代入
+      if(uTdata.get(key) == null){  //文字列の場合
+        let vakue_str = "";
+        value_str = $("#data").val();  //文字列として再代入
         uTdata.set(key, value_str)
         .save()
+        .then(function(results){
+          $("#display").removeClass();
+          $("#display").addClass("bg-success");
+          $("#display").html("enter success");
+        })
+        .catch(function(results){
+          $("#display").removeClass();
+          $("#display").addClass("bg-warning");
+          $("#display").html("enter fail");
+        })
       }else{             //数字の場合
+        let value = parseInt($("#data").val());
         uTdata.set(key, value)
         .save()
+        .then(function(results){
+          $("#display").removeClass();
+          $("#display").addClass("bg-success");
+          $("#display").html("enter success");
+        })
+        .catch(function(results){
+          $("#display").removeClass();
+          $("#display").addClass("bg-warning");
+          $("#display").html("enter fail");
+        })
       }
-      .then(function(results){
-        $("#display").removeClass();
-        $("#display").addClass("bg-success");
-        $("#display").html("enter success");
-      })
-      .catch(function(results){
-        $("#display").removeClass();
-        $("#display").addClass("bg-warning");
-        $("#display").html("enter fail");
-      })
     }
     //データ一覧表示処理
     function fetchAll() {
@@ -132,8 +147,11 @@
 <body>
   <h1 class="text-light bg-secondary">mbaas update</h1>
   <div>
-    <input type="text" id="data" placeholder="スコア"> 
-    <a onclick="enterData()" class="btn btn-outline-secondary" role="button">Enter</a>
+    <form name="content">
+      <input type="text" id="data" placeholder="スコア"> 
+      <a onclick="enterData()" class="btn btn-outline-secondary" role="button">Enter</a>
+      <button type="button" onclick="formReset()" class="btn btn-outline-secondary">reset</button>
+    </form>
   </div>
   <div>
     <a onclick="fetchAll()" class="btn btn-outline-secondary" role="buton">Fetch All</a>
