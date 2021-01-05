@@ -10,14 +10,21 @@
     <script src="keys.js"></script>
     <script>
     let ncmb = new NCMB(appKey, clientKey);
-    let UTdata = ncmb.DataStore("UpdateTest");
+    let UTdata = ncmb.DataStore("LastTest");
     let key = "score";
+
     //データ追加処理
     function enterData() {
       let uTdata = new UTdata();
       let value = parseInt($("#data").val());
-      uTdata.set(key, value)
-      .save()
+      if(value == null){  //文字列の場合
+        let value = $("#data").val();  //文字列として再代入
+        uTdata.set(key, value_str)
+        .save()
+      }else{             //数字の場合
+        uTdata.set(key, value)
+        .save()
+      }
       .then(function(results){
         $("#display").removeClass();
         $("#display").addClass("bg-success");
