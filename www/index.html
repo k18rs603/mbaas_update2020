@@ -74,15 +74,17 @@
     }
     //データ削除処理(先頭のみ)
     function deleteData() {
+      let tmp;
       UTdata.fetch()         //先頭データを取り出す
       .then(function(uTdata){
+        tmp = uTdata.get(key);  //保存
         return uTdata.delete();
       })
       //成功時
       .then(function(results){
         $("#display").removeClass();
         $( "#display").addClass("bg-success");
-        $("#display").html("delete success");
+        $("#display").html("delete success" + "<br>" + "delete as..." + tmp);
       })
       //失敗時(エラー出力)
       .catch(function(error){
