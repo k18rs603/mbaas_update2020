@@ -78,7 +78,7 @@
       UTdata.fetchAll()         //全データを取り出す
       .then(function(uTdata){
         let p_num = parseInt($("#delete").val());
-        tmp = uTdata.get(key);  //保存
+        tmp = uTdata[--p_num].get(key);  //保存
         return uTdata[p_num].delete();
       })
       //成功時
@@ -120,7 +120,6 @@
       let sum = 0;  //データの総数
       UTdata.count().fetchAll()
       .then(function(results){
-        console.log(results);
         for(let j = 0;j < results.length;j++){
           if(isNaN(results[j].get(key)) == false){  //数字の場合
             counter_num = counter_num + 1;
