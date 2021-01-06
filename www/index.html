@@ -22,7 +22,7 @@
     function enterData() {
       let uTdata = new UTdata();
       if(uTdata.get(key) == null){  //文字列の場合
-        let vakue_str = "";
+        let value_str = "";
         value_str = $("#data").val();  //文字列として再代入
         uTdata.set(key, value_str)
         .save()
@@ -72,9 +72,9 @@
         $("#display").html("delete fail:" + JSON.stringify(error));
       })
     }
-    //データ削除処理(先頭のみ)
+    //データ削除処理
     function deleteData() {
-      let tmp;
+      let tmp;                       //削除データ表示用
       UTdata.fetchAll()         //全データを取り出す
       .then(function(uTdata){
         let p_num = parseInt($("#delete").val());
@@ -84,7 +84,7 @@
       //成功時
       .then(function(results){
         $("#display").removeClass();
-        $( "#display").addClass("bg-success");
+        $("#display").addClass("bg-success");
         $("#display").html("delete success" + "<br>" + "delete as..." + tmp);
       })
       //失敗時(エラー出力)
@@ -96,16 +96,30 @@
     }
     //データ更新処理(先頭データを指定の数字に更新)
     function updateData() {
-      UTdata.fetch()
+      let tmp;
+      let value;
+      let p_num = 0;
+      UTdata.fetchAll()
       .then(function(uTdata){
-        let value = parseInt($("#update").val());
-        uTdata.set(key, value);
-        return uTdata.update();
+        if( isNaN(value)  == true ){  //文字の場合
+          value = $("#update_num").val();     //文字として保存
+        }else{                       //数字の場合
+          value = parseInt($("#update_num").val());     //数字として保存
+        }
+        p_num = parseInt($("#update_no").val());   //番号
+        tmp = uTdata[--p_num].get(key);  //保存
+        //デバッグ用
+        //console.log(uTdata[p_num].get(key));
+        //console.log(isNaN( uTdata[p_num].get(key) ));
+        ///console.log(isNaN(value));
+        //console.log(uTdata[p_num].key);
+        uTdata[p_num].set(key, value);
+        return uTdata[p_num].update();
       })
       .then(function(results){
         $("#display").removeClass();
         $("#display").addClass("bg-success");
-        $("#display").html("update success");
+        $("#display").html("update success" + "<br>" + "update to... " + tmp + " To " + results.get(key));
       })
       .catch(function(error){
         $("#display").removeClass();
@@ -191,8 +205,9 @@
       <input type="text" id="delete" placeholder="削除(番号)">
      <a onclick="deleteData()" class="btn btn-outline-secondary" role="buton">Delete</a>
       <button type="button" onclick="formReset()" class="btn btn-outline-secondary">reset</button>
-    <input type="text" id="update" placeholder="更新">
-    <a onclick="updateData()" class="btn btn-outline-secondary" role="button">Update</a>
+    <input type="text" id="update_num" placeholder="更新(数値)">
+     <input type="text" id="update_no" placeholder="更新(番号)">
+    <a onclick="updateData()" class="btn btn-outline-secondary" role="button" name="update_btn">Update</a>
     </form>
   </div>
   <div>
